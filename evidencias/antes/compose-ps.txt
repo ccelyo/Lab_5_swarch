@@ -1,0 +1,10 @@
+COMMAND: docker compose -p lab5-seg-before ps
+
+NAME                         IMAGE                      COMMAND                  SERVICE    CREATED          STATUS                    PORTS
+lab5-seg-before-attacker-1   lab5-seg-before-attacker   "sleep infinity"         attacker   24 seconds ago   Up 19 seconds             
+lab5-seg-before-backend-1    lab5-seg-before-backend    "/docker-entrypoint.…"   backend    24 seconds ago   Up 18 seconds (healthy)   80/tcp, 8080/tcp
+lab5-seg-before-db-1         postgres:16-alpine         "docker-entrypoint.s…"   db         24 seconds ago   Up 16 seconds (healthy)   5432/tcp
+lab5-seg-before-frontend-1   lab5-seg-before-frontend   "/docker-entrypoint.…"   frontend   24 seconds ago   Up 14 seconds             80/tcp
+lab5-seg-before-gateway-1    lab5-seg-before-gateway    "/entrypoint.sh"         gateway    21 seconds ago   Up 10 seconds (healthy)   80/tcp, 443/tcp
+
+EXIT_CODE: 0

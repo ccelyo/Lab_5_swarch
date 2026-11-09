@@ -1,0 +1,139 @@
+COMMAND: docker compose -f c:\Users\andre\Desktop\Felipe\universidad\arquisoft\Lab_5_swarch\lab-pruebas\docker-compose.after.yml -p lab5-seg-after up -d --build --wait --wait-timeout 240
+
+Sending build context to Docker daemon     172B
+Sending build context to Docker daemon     186B
+Sending build context to Docker daemon     426B
+Step 1/4 : FROM nginx:1.27-alpineStep 1/4 : FROM alpine:3.20
+Step 1/6 : FROM nginx:1.27-alpine
+
+ ---> d9e853e87e55
+Step 2/4 : RUN apk add --no-cache curl nmap openssl
+ ---> Using cache
+ ---> 421ef34c3d9b
+Step 3/4 : CMD ["sleep", "infinity"]
+ ---> Using cache
+ ---> 014b70091761
+Step 4/4 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> f59a087a8190
+ ---> 65645c7bb6a0
+Step 2/6 : RUN apk add --no-cache curl openssl
+ ---> Using cache
+ ---> 87f3528fcda3
+Step 3/6 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---> Using cache
+ ---> cb0659f5de4a
+Step 4/6 : EXPOSE 8080
+ ---> Using cache
+ ---> f5ca6261fdca
+Step 5/6 : CMD ["nginx", "-g", "daemon off;"]
+ ---> Using cache
+ ---> bd5d27ca45e7
+Step 6/6 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> e7f8bb53282c
+ ---> 65645c7bb6a0
+Step 2/4 : RUN apk add --no-cache curl openssl
+ ---> Using cache
+ ---> 87f3528fcda3
+Step 3/4 : EXPOSE 80
+ ---> Using cache
+ ---> 372ffd972312
+Step 4/4 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> 6fa2f42c16eb
+Successfully built f59a087a8190
+Successfully built e7f8bb53282c
+Successfully built 6fa2f42c16eb
+Successfully tagged lab5-seg-after-attacker:latest
+Successfully tagged lab5-seg-after-backend:latest
+Successfully tagged lab5-seg-after-frontend:latest
+Sending build context to Docker daemon     678B
+Step 1/8 : FROM nginx:1.27-alpine
+ ---> 65645c7bb6a0
+Step 2/8 : RUN apk add --no-cache openssl curl
+ ---> Using cache
+ ---> 15b9b430cb3b
+Step 3/8 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---> Using cache
+ ---> 34d696e269b9
+Step 4/8 : COPY entrypoint.sh /entrypoint.sh
+ ---> Using cache
+ ---> 893a57e2d2bd
+Step 5/8 : RUN chmod +x /entrypoint.sh
+ ---> Using cache
+ ---> 24e235f0f7c7
+Step 6/8 : EXPOSE 443
+ ---> Using cache
+ ---> 23ff425b1606
+Step 7/8 : ENTRYPOINT ["/entrypoint.sh"]
+ ---> Using cache
+ ---> a02b31d20012
+Step 8/8 : LABEL com.docker.compose.image.builder=classic
+ ---> Using cache
+ ---> d84e1261f0cd
+Successfully built d84e1261f0cd
+Successfully tagged lab5-seg-after-gateway:latest
+time="2026-11-09T13:17:34-05:00" level=warning msg="buildx Docker CLI plugin not found: falling back to the classic builder. BuildKit-only build features (multi-arch, secrets, ssh, additional contexts, ...) will not be available"
+ Image lab5-seg-after-backend Building 
+ Image lab5-seg-after-attacker Building 
+ Image lab5-seg-after-frontend Building 
+ Image lab5-seg-after-backend Building 
+ Image lab5-seg-after-frontend Building 
+ Image lab5-seg-after-attacker Building 
+ Image lab5-seg-after-attacker Built 
+ Image lab5-seg-after-attacker Built 
+ Image lab5-seg-after-backend Built 
+ Image lab5-seg-after-backend Built 
+ Image lab5-seg-after-frontend Built 
+ Image lab5-seg-after-frontend Built 
+ Image lab5-seg-after-gateway Building 
+ Image lab5-seg-after-gateway Building 
+ Image lab5-seg-after-gateway Built 
+ Image lab5-seg-after-gateway Built 
+ Network lab5-seg-after_private Creating 
+ Network lab5-seg-after_internet Creating 
+ Network lab5-seg-after_private Creating 
+ Network lab5-seg-after_public Creating 
+ Network lab5-seg-after_internet Creating 
+ Network lab5-seg-after_public Creating 
+ Network lab5-seg-after_internet Created 
+ Network lab5-seg-after_internet Created 
+ Container lab5-seg-after-attacker-1 Creating 
+ Network lab5-seg-after_private Created 
+ Network lab5-seg-after_private Created 
+ Container lab5-seg-after-backend-1 Creating 
+ Container lab5-seg-after-db-1 Creating 
+ Network lab5-seg-after_public Created 
+ Network lab5-seg-after_public Created 
+ Container lab5-seg-after-frontend-1 Creating 
+ Container lab5-seg-after-attacker-1 Created 
+ Container lab5-seg-after-frontend-1 Created 
+ Container lab5-seg-after-backend-1 Created 
+ Container lab5-seg-after-gateway-1 Creating 
+ Container lab5-seg-after-db-1 Created 
+ Container lab5-seg-after-gateway-1 Created 
+ Container lab5-seg-after-frontend-1 Starting 
+ Container lab5-seg-after-db-1 Starting 
+ Container lab5-seg-after-attacker-1 Starting 
+ Container lab5-seg-after-backend-1 Starting 
+ Container lab5-seg-after-frontend-1 Started 
+ Container lab5-seg-after-db-1 Started 
+ Container lab5-seg-after-attacker-1 Started 
+ Container lab5-seg-after-backend-1 Started 
+ Container lab5-seg-after-backend-1 Waiting 
+ Container lab5-seg-after-backend-1 Healthy 
+ Container lab5-seg-after-gateway-1 Starting 
+ Container lab5-seg-after-gateway-1 Started 
+ Container lab5-seg-after-attacker-1 Waiting 
+ Container lab5-seg-after-gateway-1 Waiting 
+ Container lab5-seg-after-frontend-1 Waiting 
+ Container lab5-seg-after-backend-1 Waiting 
+ Container lab5-seg-after-db-1 Waiting 
+ Container lab5-seg-after-attacker-1 Healthy 
+ Container lab5-seg-after-db-1 Healthy 
+ Container lab5-seg-after-frontend-1 Healthy 
+ Container lab5-seg-after-backend-1 Healthy 
+ Container lab5-seg-after-gateway-1 Healthy 
+
+EXIT_CODE: 0

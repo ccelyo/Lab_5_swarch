@@ -1,0 +1,5 @@
+COMMAND: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+
+curl: (6) Could not resolve host: backend
+
+EXIT_CODE: 6

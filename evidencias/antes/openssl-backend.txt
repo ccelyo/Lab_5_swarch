@@ -1,0 +1,21 @@
+COMMAND: timeout 8 openssl s_client -connect backend:8080 -servername backend </dev/null
+
+CONNECTED(00000003)
+---
+no peer certificate available
+---
+No client certificate CA names sent
+---
+SSL handshake has read 5 bytes and written 315 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+This TLS version forbids renegotiation.
+No ALPN negotiated
+Early data was not sent
+Verify return code: 0 (ok)
+---
+Connecting to 172.18.0.3
+288B572D4F7B0000:error:0A00010B:SSL routines:tls_validate_record_header:wrong version number:ssl/record/methods/tlsany_meth.c:77:
+
+EXIT_CODE: 1

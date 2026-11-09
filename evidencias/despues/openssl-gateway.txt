@@ -1,0 +1,57 @@
+COMMAND: timeout 8 openssl s_client -connect gateway:443 -servername gateway </dev/null
+
+CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:CN=gateway
+   i:CN=gateway
+   a:PKEY: rsaEncryption, 2048 (bit); sigalg: RSA-SHA256
+   v:NotBefore: Nov  9 18:17:55 2026 GMT; NotAfter: Nov 10 18:17:55 2026 GMT
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIDBTCCAe2gAwIBAgIUZSdDo5arjXP+vj5wM7N0mqeA2qowDQYJKoZIhvcNAQEL
+BQAwEjEQMA4GA1UEAwwHZ2F0ZXdheTAeFw0yNjExMDkxODE3NTVaFw0yNjExMTAx
+ODE3NTVaMBIxEDAOBgNVBAMMB2dhdGV3YXkwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDQscv2aVXG4zTcuDZLdhNKsZQIMxGr2FCs6A8vn1s8dGS0XpDz
+r+ngKrmu73JFIUUAy1WcrG055jwUWRY35535453niqH7GVQKuNC4XA94Ikah8gCs
+DUDrL4t1Rqy4NVKO2tEKfuryJtcgXVy0DwVT/qFR1CH7Z+BTcL5NEm1GJDipLHLa
+wGGTGEkAyAcpoLiVqZsF1d96jk276argnTQxRtHbX4IXJu2+/Okf6qhHTJDbhOE2
+s2a8L9dl5yH1S+abpuIEr1pxgFOEiVq+eA2PAgwlwIxe1u4QzTq63jNlLVsdm0Eg
+9eJKPjhz/eIF+RCtmF/uGXw/VdrNpPnzB+xbAgMBAAGjUzBRMB0GA1UdDgQWBBTa
+jQiuL5TUZl4BIjJWtIMJjNgcbTAfBgNVHSMEGDAWgBTajQiuL5TUZl4BIjJWtIMJ
+jNgcbTAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAos1QSzPu5
+EnI3ubF2q6pM/UMV4FyRrLsm0rJgw3n6YR/A3F04iLwR1lc+dQzlBn32JRnlIKmc
+OT2J+T8dSdyysxnNeJswKmukQTcRCIVRQkn3uHm0y10MCASVSqCBgoCIgefNE3o/
+r6yf2IjBfWFJnMPdHJn0YLwlnXXjeWV3ULVmybyJdUvSsbr7DMtCs1LBd1f59/J1
+HTDIzzudrk+5djCCWDbohrIxyUulv0ay5PyFFs9pWAdHPTMgt9D7OOiU8zyFfFX8
+aofRK2gGpNbIod0Sm6TIlhzX4k3VpPe50975B17uCQbVW+03LiQrJUDovG5HHuU5
+bWqFmRCojvLc
+-----END CERTIFICATE-----
+subject=CN=gateway
+issuer=CN=gateway
+---
+No client certificate CA names sent
+Peer signing digest: SHA256
+Peer signature type: RSA-PSS
+Server Temp Key: X25519, 253 bits
+---
+SSL handshake has read 1337 bytes and written 395 bytes
+Verification error: self-signed certificate
+---
+New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+Server public key is 2048 bit
+This TLS version forbids renegotiation.
+No ALPN negotiated
+Early data was not sent
+Verify return code: 18 (self-signed certificate)
+---
+Connecting to 172.18.0.3
+depth=0 CN=gateway
+verify error:num=18:self-signed certificate
+verify return:1
+depth=0 CN=gateway
+verify return:1
+DONE
+
+EXIT_CODE: 0

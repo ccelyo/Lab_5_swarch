@@ -1,0 +1,6 @@
+COMMAND: timeout 8 openssl s_client -connect db:5432 </dev/null
+
+281B6DFCB27D0000:error:10080002:BIO routines:BIO_lookup_ex:system lib:crypto/bio/bio_addr.c:767:Try again
+connect:errno=22
+
+EXIT_CODE: 1

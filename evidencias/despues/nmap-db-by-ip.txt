@@ -1,0 +1,15 @@
+COMMAND: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s 10.0.2.2
+
+COMMAND: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s 10.0.2.2
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-09 18:18 UTC
+Nmap scan report for _gateway (10.0.2.2)
+Host is up.
+
+PORT     STATE    SERVICE
+443/tcp  filtered https
+5432/tcp filtered postgresql
+8080/tcp filtered http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 3.04 seconds
+
+EXIT_CODE: 0

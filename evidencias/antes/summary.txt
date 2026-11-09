@@ -1,0 +1,83 @@
+phase: before
+compose: C:\Users\andre\Desktop\Felipe\universidad\arquisoft\Lab_5_swarch\lab-pruebas\docker-compose.before.yml
+project: lab5-seg-before
+note: raw command output is in the sibling txt files. This summary only classifies it.
+
+BEGIN attacker nmap gateway
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s gateway
+exit: 0
+observation: 443/tcp  open   https; 5432/tcp closed postgresql; 8080/tcp closed http-proxy
+END
+
+BEGIN attacker nmap backend
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s backend
+exit: 0
+observation: 443/tcp  closed https; 5432/tcp closed postgresql; 8080/tcp open   http-proxy
+END
+
+BEGIN attacker nmap db
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s db
+exit: 0
+observation: 443/tcp  closed https; 5432/tcp open   postgresql; 8080/tcp closed http-proxy
+END
+
+BEGIN attacker curl gateway
+command: curl -k -sS -D - --connect-timeout 5 --max-time 10 https://gateway:443/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN attacker curl backend
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN attacker openssl gateway
+command: timeout 8 openssl s_client -connect gateway:443 -servername gateway </dev/null
+exit: 0
+observation: TLS handshake completed, self-signed certificate
+END
+
+BEGIN attacker openssl backend
+command: timeout 8 openssl s_client -connect backend:8080 -servername backend </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
+BEGIN attacker openssl db
+command: timeout 8 openssl s_client -connect db:5432 -servername db </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
+BEGIN internal-gateway-to-backend.txt
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN internal-backend-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
+BEGIN internal-frontend-to-backend.txt
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN internal-frontend-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
+BEGIN internal-gateway-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+

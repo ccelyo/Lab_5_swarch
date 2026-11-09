@@ -1,0 +1,102 @@
+phase: after
+compose: c:\Users\andre\Desktop\Felipe\universidad\arquisoft\Lab_5_swarch\lab-pruebas\docker-compose.after.yml
+project: lab5-seg-after
+note: raw command output is in the sibling txt files. This summary only classifies it.
+limitation: internal-gateway-to-db stays open in this harness. The team ACL (Fabian) should turn that check into a timeout. See section 7 of I5_2c.md.
+
+BEGIN attacker nmap gateway
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s gateway
+exit: 0
+observation: 443/tcp  open   https; 5432/tcp closed postgresql; 8080/tcp closed http-proxy
+END
+
+BEGIN attacker nmap backend
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s backend
+exit: 0
+observation: name not visible from this network
+END
+
+BEGIN attacker nmap backend by ip
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s 10.0.2.3
+exit: 0
+observation: 443/tcp  filtered https; 5432/tcp filtered postgresql; 8080/tcp filtered http-proxy
+END
+
+BEGIN attacker nmap db
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s db
+exit: 0
+observation: name not visible from this network
+END
+
+BEGIN attacker nmap db by ip
+command: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s 10.0.2.2
+exit: 0
+observation: 443/tcp  filtered https; 5432/tcp filtered postgresql; 8080/tcp filtered http-proxy
+END
+
+BEGIN attacker curl gateway
+command: curl -k -sS -D - --connect-timeout 5 --max-time 10 https://gateway:443/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN attacker curl backend
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 6
+observation: name not visible from this network
+END
+
+BEGIN attacker curl backend by ip
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://10.0.2.3:8080/
+exit: 7
+observation: curl: (7) Failed to connect to 10.0.2.3 port 8080 after 0 ms: Could not connect to server
+END
+
+BEGIN attacker openssl gateway
+command: timeout 8 openssl s_client -connect gateway:443 -servername gateway </dev/null
+exit: 0
+observation: TLS handshake completed, self-signed certificate
+END
+
+BEGIN attacker openssl backend
+command: timeout 8 openssl s_client -connect backend:8080 -servername backend </dev/null
+exit: 1
+observation: 283B4E77A6720000:error:10080002:BIO routines:BIO_lookup_ex:system lib:crypto/bio/bio_addr.c:767:Try again connect:errno=22
+END
+
+BEGIN attacker openssl db
+command: timeout 8 openssl s_client -connect db:5432 -servername db </dev/null
+exit: 1
+observation: 281B7B1AAD780000:error:10080002:BIO routines:BIO_lookup_ex:system lib:crypto/bio/bio_addr.c:767:Try again connect:errno=22
+END
+
+BEGIN internal-gateway-to-backend.txt
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 0
+observation: sensitive data returned
+END
+
+BEGIN internal-backend-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
+BEGIN internal-frontend-to-backend.txt
+command: curl -sS -D - --connect-timeout 5 --max-time 8 http://backend:8080/
+exit: 6
+observation: name not visible from this network
+END
+
+BEGIN internal-frontend-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: 281B6DFCB27D0000:error:10080002:BIO routines:BIO_lookup_ex:system lib:crypto/bio/bio_addr.c:767:Try again connect:errno=22
+END
+
+BEGIN internal-gateway-to-db.txt
+command: timeout 8 openssl s_client -connect db:5432 </dev/null
+exit: 1
+observation: TCP connected, peer is not TLS
+END
+
