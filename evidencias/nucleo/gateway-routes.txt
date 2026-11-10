@@ -1,0 +1,7 @@
+SERVICE: gateway
+COMMAND: ip route
+
+default via 172.18.0.1 dev eth0 
+10.0.1.0/24 dev eth1 scope link  src 10.0.1.10 
+10.0.2.0/24 via 10.0.1.254 dev eth1 
+172.18.0.0/16 dev eth0 scope link  src 172.18.0.3 
