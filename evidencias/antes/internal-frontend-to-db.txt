@@ -1,0 +1,21 @@
+COMMAND: timeout 8 openssl s_client -connect db:5432 </dev/null
+
+CONNECTED(00000003)
+---
+no peer certificate available
+---
+No client certificate CA names sent
+---
+SSL handshake has read 0 bytes and written 306 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+This TLS version forbids renegotiation.
+No ALPN negotiated
+Early data was not sent
+Verify return code: 0 (ok)
+---
+Connecting to 172.18.0.4
+282B7D68F47B0000:error:0A000126:SSL routines::unexpected eof while reading:ssl/record/rec_layer_s3.c:694:
+
+EXIT_CODE: 1

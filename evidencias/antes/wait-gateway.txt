@@ -1,0 +1,4 @@
+COMMAND: curl -k -sS -o /dev/null --connect-timeout 3 --max-time 5 https://gateway:443/ (retry until ready)
+
+
+EXIT_CODE: 0

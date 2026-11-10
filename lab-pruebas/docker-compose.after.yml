@@ -1,0 +1,73 @@
+# Arnés de pruebas de Andrés (rol 7). No reemplaza el docker-compose del equipo (Kevin / Fabián).
+# Topología segmentada:
+#   internet: atacante y gateway
+#   public  10.0.1.0/24: gateway y frontend (DMZ)
+#   private 10.0.2.0/24 (internal): gateway, backend y base
+# El frontend no entra a private, así que el resto de la DMZ no llega al backend ni a la base.
+# El gateway sí entra, para poder hacer de proxy. Con solo redes de Docker ese contenedor
+# todavía puede abrir el puerto 5432. La ACL que se lo niega es del núcleo (Fabián);
+# la prueba internal-gateway-to-db documenta esa limitación.
+
+name: lab5-seg-after
+
+services:
+  attacker:
+    build: ./attacker
+    init: true
+    networks: [internet]
+
+  gateway:
+    build: ./gateway
+    init: true
+    networks: [internet, public, private]
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -kfsS --max-time 3 https://127.0.0.1/ | grep -q patient-record-001"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+
+  frontend:
+    build: ./frontend
+    init: true
+    networks: [public]
+
+  backend:
+    build: ./backend
+    init: true
+    networks: [private]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS --max-time 3 http://127.0.0.1:8080/ | grep -q patient-record-001"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+      start_period: 3s
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
+    networks: [private]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab -d lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+networks:
+  internet:
+  public:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  private:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24

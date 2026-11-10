@@ -1,0 +1,15 @@
+COMMAND: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s db
+
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-09 18:13 UTC
+Nmap scan report for db (172.18.0.4)
+Host is up (0.00046s latency).
+rDNS record for 172.18.0.4: lab5-seg-before-db-1.lab5-seg-before_flat
+
+PORT     STATE  SERVICE
+443/tcp  closed https
+5432/tcp open   postgresql
+8080/tcp closed http-proxy
+
+Nmap done: 1 IP address (1 host up) scanned in 0.02 seconds
+
+EXIT_CODE: 0

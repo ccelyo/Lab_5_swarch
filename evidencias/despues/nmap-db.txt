@@ -1,0 +1,8 @@
+COMMAND: nmap -4 -sT -Pn -p 443,8080,5432 --max-retries 1 --host-timeout 12s db
+
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-09 18:18 UTC
+Nmap done: 0 IP addresses (0 hosts up) scanned in 5.03 seconds
+Failed to resolve "db".
+WARNING: No targets were specified, so 0 hosts scanned.
+
+EXIT_CODE: 0
