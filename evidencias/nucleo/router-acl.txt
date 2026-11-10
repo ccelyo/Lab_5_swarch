@@ -1,0 +1,10 @@
+SERVICE: router
+COMMAND: iptables -L FORWARD -v -n --line-numbers
+
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination         
+1       36  3010 ACCEPT     0    --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+2        0     0 DROP       0    --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate INVALID
+3        4   240 ACCEPT     6    --  *      *       10.0.1.10            10.0.2.10            tcp dpt:8080 ctstate NEW
+4       27  1620 NFLOG      0    --  *      *       0.0.0.0/0            0.0.0.0/0            limit: avg 30/min burst 60 nflog-prefix SEG-DENY-FWD nflog-group 1
+5       27  1620 DROP       0    --  *      *       0.0.0.0/0            0.0.0.0/0           

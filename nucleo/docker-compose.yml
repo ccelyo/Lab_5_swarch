@@ -1,0 +1,108 @@
+# Núcleo del patrón Network Segmentation (rol 6, Fabián).
+# Reutiliza las imágenes de lab-pruebas y agrega el router interno con la ACL.
+#
+#   internet            attacker, gateway (solo 443 publicado)
+#   public  10.0.1.0/24 gateway .10, frontend .20, router .254   (DMZ)
+#   private 10.0.2.0/24 router .254, backend .10, db .20         (internal)
+#
+# El gateway ya no está en private: llega al backend solo a través del router.
+
+name: lab5-seg-core
+
+services:
+  attacker:
+    build: ../lab-pruebas/attacker
+    init: true
+    networks: [internet]
+
+  gateway:
+    build: ../lab-pruebas/gateway
+    init: true
+    ports:
+      - "443:443"
+    extra_hosts:
+      - "backend:10.0.2.10"
+    networks:
+      internet: {}
+      public:
+        ipv4_address: 10.0.1.10
+    depends_on:
+      router:
+        condition: service_started
+      backend:
+        condition: service_healthy
+
+  # Instala en el netns del gateway la ruta al segmento privado vía el router.
+  # Corre una vez y termina; el gateway nunca recibe NET_ADMIN.
+  gateway-route:
+    build: ./router
+    entrypoint: ["ip", "route", "replace", "10.0.2.0/24", "via", "10.0.1.254"]
+    network_mode: "service:gateway"
+    cap_add: [NET_ADMIN]
+    restart: "no"
+    depends_on:
+      gateway:
+        condition: service_started
+
+  router:
+    build: ./router
+    cap_add: [NET_ADMIN, NET_RAW]
+    sysctls:
+      net.ipv4.ip_forward: "1"
+    environment:
+      GATEWAY_IP: 10.0.1.10
+      BACKEND_IP: 10.0.2.10
+      BACKEND_PORT: "8080"
+    networks:
+      public:
+        ipv4_address: 10.0.1.254
+      private:
+        ipv4_address: 10.0.2.254
+
+  frontend:
+    build: ../lab-pruebas/frontend
+    init: true
+    networks:
+      public:
+        ipv4_address: 10.0.1.20
+
+  backend:
+    build: ../lab-pruebas/backend
+    init: true
+    networks:
+      private:
+        ipv4_address: 10.0.2.10
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS --max-time 3 http://127.0.0.1:8080/ | grep -q patient-record-001"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+      start_period: 3s
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
+    networks:
+      private:
+        ipv4_address: 10.0.2.20
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab -d lab"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 5s
+
+networks:
+  internet:
+  public:
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  private:
+    internal: true
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24

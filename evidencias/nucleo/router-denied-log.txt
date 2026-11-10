@@ -1,0 +1,44 @@
+ACL cargada:
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -m limit --limit 30/min --limit-burst 60 -j NFLOG --nflog-prefix SEG-DENY-IN --nflog-group 1
+-A INPUT -j DROP
+-A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A FORWARD -m conntrack --ctstate INVALID -j DROP
+-A FORWARD -s 10.0.1.10/32 -d 10.0.2.10/32 -p tcp -m tcp --dport 8080 -m conntrack --ctstate NEW -j ACCEPT
+-A FORWARD -m limit --limit 30/min --limit-burst 60 -j NFLOG --nflog-prefix SEG-DENY-FWD --nflog-group 1
+-A FORWARD -j DROP
+-P POSTROUTING ACCEPT
+-A POSTROUTING -s 10.0.1.0/24 -d 10.0.2.0/24 -j MASQUERADE
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on nflog:1, link-type NFLOG (Linux netfilter log messages), snapshot length 262144 bytes
+2026-11-10 02:35:31.152027 IP 10.0.1.10.48744 > 10.0.2.20.5432: Flags [S], seq 2988637248, win 64240, options [mss 1460,sackOK,TS val 1576091578 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:32.178657 IP 10.0.1.10.48744 > 10.0.2.20.5432: Flags [S], seq 2988637248, win 64240, options [mss 1460,sackOK,TS val 1576092594 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:33.204073 IP 10.0.1.10.48744 > 10.0.2.20.5432: Flags [S], seq 2988637248, win 64240, options [mss 1460,sackOK,TS val 1576093620 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:34.224019 IP 10.0.1.10.48744 > 10.0.2.20.5432: Flags [S], seq 2988637248, win 64240, options [mss 1460,sackOK,TS val 1576094646 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:35.247707 IP 10.0.1.10.48744 > 10.0.2.20.5432: Flags [S], seq 2988637248, win 64240, options [mss 1460,sackOK,TS val 1576095666 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:36.272861 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050241964 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:37.300902 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050242969 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:38.320916 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050243997 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:39.348983 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050245017 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:40.369348 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050246045 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:41.395522 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050247065 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:43.441938 IP 10.0.1.10.48748 > 10.0.2.20.5432: Flags [S], seq 2614322736, win 64240, options [mss 1460,sackOK,TS val 3050249113 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:43.441971 IP 10.0.1.10.37188 > 10.0.2.10.22: Flags [S], seq 230008188, win 64240, options [mss 1460,sackOK,TS val 1600429662 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:45.426183 IP 10.0.1.10.37188 > 10.0.2.10.22: Flags [S], seq 230008188, win 64240, options [mss 1460,sackOK,TS val 1600430672 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:46.450237 IP 10.0.1.10.37188 > 10.0.2.10.22: Flags [S], seq 230008188, win 64240, options [mss 1460,sackOK,TS val 1600431698 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:47.476727 IP 10.0.1.10.37188 > 10.0.2.10.22: Flags [S], seq 230008188, win 64240, options [mss 1460,sackOK,TS val 1600432722 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:35:48.495664 IP 10.0.1.10.37188 > 10.0.2.10.22: Flags [S], seq 230008188, win 64240, options [mss 1460,sackOK,TS val 1600433749 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:05.972806 IP 10.0.1.10.60456 > 10.0.2.20.5432: Flags [S], seq 935466577, win 64240, options [mss 1460,sackOK,TS val 2847829555 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:06.993686 IP 10.0.1.10.60456 > 10.0.2.20.5432: Flags [S], seq 935466577, win 64240, options [mss 1460,sackOK,TS val 2847830595 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:08.016964 IP 10.0.1.10.60456 > 10.0.2.20.5432: Flags [S], seq 935466577, win 64240, options [mss 1460,sackOK,TS val 2847831616 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:09.041962 IP 10.0.1.10.60456 > 10.0.2.20.5432: Flags [S], seq 935466577, win 64240, options [mss 1460,sackOK,TS val 2847832639 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:10.063611 IP 10.0.1.10.60456 > 10.0.2.20.5432: Flags [S], seq 935466577, win 64240, options [mss 1460,sackOK,TS val 2847833664 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:11.087961 IP 10.0.1.10.41892 > 10.0.2.10.22: Flags [S], seq 3848571552, win 64240, options [mss 1460,sackOK,TS val 1989893997 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:12.112664 IP 10.0.1.10.41892 > 10.0.2.10.22: Flags [S], seq 3848571552, win 64240, options [mss 1460,sackOK,TS val 1989895010 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:12.112726 IP 10.0.1.10.41892 > 10.0.2.10.22: Flags [S], seq 3848571552, win 64240, options [mss 1460,sackOK,TS val 1989896034 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:14.164727 IP 10.0.1.10.41892 > 10.0.2.10.22: Flags [S], seq 3848571552, win 64240, options [mss 1460,sackOK,TS val 1989897058 ecr 0,nop,wscale 10], length 0
+2026-11-10 02:36:15.184469 IP 10.0.1.10.41892 > 10.0.2.10.22: Flags [S], seq 3848571552, win 64240, options [mss 1460,sackOK,TS val 1989898086 ecr 0,nop,wscale 10], length 0

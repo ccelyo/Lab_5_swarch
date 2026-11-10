@@ -1,0 +1,29 @@
+SERVICE: attacker
+COMMAND: nmap -4 -sT -Pn -p 443,8080,5432 10.0.2.10 10.0.2.20 10.0.1.254
+
+Starting Nmap 7.95 ( https://nmap.org ) at 2026-11-10 02:36 UTC
+Nmap scan report for 10.0.2.10
+Host is up.
+
+PORT     STATE    SERVICE
+443/tcp  filtered https
+5432/tcp filtered postgresql
+8080/tcp filtered http-proxy
+
+Nmap scan report for 10.0.2.20
+Host is up.
+
+PORT     STATE    SERVICE
+443/tcp  filtered https
+5432/tcp filtered postgresql
+8080/tcp filtered http-proxy
+
+Nmap scan report for 10.0.1.254
+Host is up.
+
+PORT     STATE    SERVICE
+443/tcp  filtered https
+5432/tcp filtered postgresql
+8080/tcp filtered http-proxy
+
+Nmap done: 3 IP addresses (3 hosts up) scanned in 3.04 seconds
