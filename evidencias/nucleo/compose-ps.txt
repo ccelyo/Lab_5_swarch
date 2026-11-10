@@ -1,0 +1,8 @@
+NAME                            IMAGE                         COMMAND                  SERVICE         CREATED              STATUS                          PORTS
+lab5-seg-core-attacker-1        lab5-seg-core-attacker        "sleep infinity"         attacker        About a minute ago   Up About a minute               
+lab5-seg-core-backend-1         lab5-seg-core-backend         "/docker-entrypoint.…"   backend         About a minute ago   Up About a minute (healthy)     80/tcp, 8080/tcp
+lab5-seg-core-db-1              postgres:16-alpine            "docker-entrypoint.s…"   db              About a minute ago   Up About a minute (healthy)     5432/tcp
+lab5-seg-core-frontend-1        lab5-seg-core-frontend        "/docker-entrypoint.…"   frontend        About a minute ago   Up About a minute               80/tcp
+lab5-seg-core-gateway-1         lab5-seg-core-gateway         "/entrypoint.sh"         gateway         About a minute ago   Up About a minute               0.0.0.0:443->443/tcp, [::]:443->443/tcp
+lab5-seg-core-gateway-route-1   lab5-seg-core-gateway-route   "ip route replace 10…"   gateway-route   About a minute ago   Exited (0) About a minute ago   
+lab5-seg-core-router-1          lab5-seg-core-router          "/acl.sh"                router          About a minute ago   Up About a minute               

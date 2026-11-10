@@ -1,0 +1,4 @@
+SERVICE: gateway
+COMMAND: curl -sS --max-time 8 http://backend:8080/
+
+{"service":"backend","data":"patient-record-001"}

@@ -1,0 +1,4 @@
+SERVICE: backend
+COMMAND: timeout 5 openssl s_client -connect 10.0.2.20:5432 </dev/null 2>&1 | grep -m1 CONNECTED
+
+CONNECTED(00000003)

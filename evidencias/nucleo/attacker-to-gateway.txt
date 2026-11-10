@@ -1,0 +1,4 @@
+SERVICE: attacker
+COMMAND: curl -sk --max-time 8 https://gateway/
+
+{"service":"backend","data":"patient-record-001"}

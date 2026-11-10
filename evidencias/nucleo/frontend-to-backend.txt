@@ -1,0 +1,5 @@
+SERVICE: frontend
+COMMAND: curl -sS --connect-timeout 5 http://10.0.2.10:8080/; echo exit=$?
+
+curl: (28) Connection timed out after 5007 milliseconds
+exit=28
